@@ -42,17 +42,35 @@ public class MyAsyncTask extends AsyncTask<String,Void,String>{
 
     @Override
     protected String doInBackground(String ... strings) {
+        return this.XML_SearchTab(strings);
+    }
+
+    @Override
+    protected void onPostExecute(String s) {
+        super.onPostExecute(s);
+        foodListAdapter.setItems(foodList);
+        try {
+            recyclerView.setAdapter(foodListAdapter);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            Log.d("test", "onPostExecute: error : "+e);
+        }
+        progressDialog.dismiss();
+    }
+
+    public FoodListAdapter getFoodListAdapter(){
+        Log.d("test", "getFoodListAdapter: "+foodListAdapter.getItemCount());
+        return this.foodListAdapter;
+    }
+
+    private String XML_SearchTab(String[] strings){
         String str= strings[0];      // EditText 에서  작성한 식품명 text
         String DESC_KOR = URLEncoder.encode(str);   // 식품명 str 을 encoding
         String serviceKey="d36886a7c1bd4011bcd6";   // serviceKey
-
-        //recyclerView = recyclerViews[0];
-
         String[] info = new String[15];
         info[0] = "1";
-
         ArrayList<Food> food_info = new ArrayList<Food>();
-
         // info[0]      NUM
         // info[1]      NUTR_CONT1
         // info[2]      NUTR_CONT2
@@ -69,7 +87,6 @@ public class MyAsyncTask extends AsyncTask<String,Void,String>{
         // info[13]     SERVING_SIZE
         // info[14]     SAMPLING_REGION_NAME
 
-
         String queryUrl = "http://openapi.foodsafetykorea.go.kr/api/" + serviceKey + "/I2790/xml/1/999/DESC_KOR=" + DESC_KOR;
         StringBuffer buffer=new StringBuffer();
         Log.d("test", "xml parsing strat!");
@@ -77,29 +94,20 @@ public class MyAsyncTask extends AsyncTask<String,Void,String>{
         try{
             URL url= new URL(queryUrl);                                         // String Type 의 queryUrl 을 URL 객체로 생성함
             InputStream is= url.openStream();                                   // url 위치로 입력스트림 연결
-
             XmlPullParserFactory factory= XmlPullParserFactory.newInstance();
             XmlPullParser xpp= factory.newPullParser();
             xpp.setInput( new InputStreamReader(is, "UTF-8") );     // InputStream 으로부터 xml 입력 받음
-
             String tag;
-
             xpp.next();
             int eventType= xpp.getEventType();
             buffer.append("파싱을 시작합니다!\n\n");
             while( eventType != XmlPullParser.END_DOCUMENT) {
-
                 switch( eventType ) {
                     case XmlPullParser.START_DOCUMENT:
                         buffer.append("파싱 시작...\n\n");
                         break;
-
                     case XmlPullParser.START_TAG:
-                        // Log.d("test", "getXmlData: "+"count : "+count);
-
                         tag= xpp.getName();                                 //태그 이름 얻어오기
-                        // Log.d("test", "getXmlData: "+"tag name : "+tag);
-
                         if(tag.contains("row")) {
                             ++count;
                         }                           // 첫번째 검색결과
@@ -145,7 +153,6 @@ public class MyAsyncTask extends AsyncTask<String,Void,String>{
                             buffer.append(xpp.getText());
                             buffer.append("\n");
                             info[12] = xpp.getText();
-
                              */
                             break;
                         }
@@ -159,7 +166,6 @@ public class MyAsyncTask extends AsyncTask<String,Void,String>{
                             buffer.append(xpp.getText());
                             buffer.append("\n");
                             info[9] = xpp.getText();
-
                              */
                             break;
                         }
@@ -170,7 +176,6 @@ public class MyAsyncTask extends AsyncTask<String,Void,String>{
                             buffer.append(xpp.getText());
                             buffer.append("\n");
                             info[8] = xpp.getText();
-
                              */
                             break;
                         }
@@ -184,7 +189,6 @@ public class MyAsyncTask extends AsyncTask<String,Void,String>{
                             buffer.append(xpp.getText());
                             buffer.append("\n");
                             info[7] = xpp.getText();
-
                              */
                             break;
                         }
@@ -202,7 +206,6 @@ public class MyAsyncTask extends AsyncTask<String,Void,String>{
                             buffer.append(xpp.getText());
                             buffer.append("\n");
                             info[5] = xpp.getText();
-
                              */
                             break;
                         }
@@ -219,7 +222,6 @@ public class MyAsyncTask extends AsyncTask<String,Void,String>{
                             buffer.append(xpp.getText());
                             buffer.append("\n");
                             info[10] = xpp.getText();
-                            //Log.d("test", "getXmlData: "+info[10]);
                         }
                         else if (tag.equals("SAMPLING_MONTH_NAME")) {
                             break;
@@ -231,7 +233,6 @@ public class MyAsyncTask extends AsyncTask<String,Void,String>{
                             buffer.append(xpp.getText());
                             buffer.append("\n");
                             info[14] = xpp.getText();
-
                              */
                             break;
                         }
@@ -247,8 +248,7 @@ public class MyAsyncTask extends AsyncTask<String,Void,String>{
                             buffer.append("\n");
                             info[11] = xpp.getText();
                             */
-
-                             break;
+                            break;
                         }
                         else if (tag.equals("SAMPLING_REGION_CD")) {
                             break;
@@ -266,28 +266,19 @@ public class MyAsyncTask extends AsyncTask<String,Void,String>{
                             break;
                         }
                         break;
-
-
                     case XmlPullParser.TEXT:
                         break;
-
-
                     case XmlPullParser.END_TAG:
                         tag= xpp.getName(); // 태그 이름 얻어오기
-
                         if(tag.contains("row")) {
-
                             if(count >=1){
                                 foodList.add(new Food(info[10],new String[]{info[2],info[6],info[3],info[4]},info[1]));
                                 Log.d("test", "getXmlData: "+info[10]+" "+info[2]+" "+info[3]+" "+info[4]+" "+info[1]);
-                                //Log.d("test", "getXmlData: "+foodList.get(count-2).getFoodname()+" "+info[2]+" "+info[3]+" "+info[4]+" "+info[1]);
                             }
-
                             buffer.append("\n");
                         };        // 첫번째 검색결과종료..줄바꿈
                         break;
                 }
-
                 eventType= xpp.next();
             }
         } catch (Exception e) {
@@ -298,31 +289,5 @@ public class MyAsyncTask extends AsyncTask<String,Void,String>{
         buffer.append("파싱을 종료합니다!\n");
 
         return buffer.toString();
-    }
-
-
-
-    @Override
-    protected void onPostExecute(String s) {
-        super.onPostExecute(s);
-
-        //FoodListAdapter foodListAdapter = new FoodListAdapter();
-        foodListAdapter.setItems(foodList);
-
-        //Log.d("test", "onPostExecute: "+foodListAdapter.getItemCount());
-        //Log.d("test", "onPostExecute: "+foodListAdapter.getItem(0).getFoodname());
-        try {
-            recyclerView.setAdapter(foodListAdapter);
-        }
-        catch (Exception e){
-            e.printStackTrace();
-            Log.d("test", "onPostExecute: error : "+e);
-        }
-        progressDialog.dismiss();
-    }
-
-    public FoodListAdapter getFoodListAdapter(){
-        Log.d("test", "getFoodListAdapter: "+foodListAdapter.getItemCount());
-        return this.foodListAdapter;
     }
 }

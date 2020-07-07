@@ -19,8 +19,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.RadarChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -45,8 +47,6 @@ public class FoodListClickDialog extends DialogFragment {
     String m4="500";
     String m5="600";
 
-
-
     public FoodListClickDialog(String foodname,String kcal,String[] nutr){
         this.foodname = foodname;
         this.kcal = kcal;
@@ -55,10 +55,7 @@ public class FoodListClickDialog extends DialogFragment {
 
    public Dialog onCreateDialog(Bundle saveInstanceState){
        View view = getActivity().getLayoutInflater().inflate(R.layout.fragment_food_list_click_dialog, new LinearLayout(getActivity()), false);
-
-       // 크기 설정
-
-
+       Button regButton = view.findViewById(R.id.registBtn);
 
       // 그래프 설정
        RadarChart radarChart=(RadarChart)view.findViewById(R.id.chart3);
@@ -99,15 +96,32 @@ public class FoodListClickDialog extends DialogFragment {
        builder.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
        builder.setContentView(view);
 
+       regButton.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               FoodDataBaseManager FM = ((MainActivity)getActivity()).getFoodDBManager();
+               if(FM.checkConnection()){
+
+               }
+               else{
+                   Toast.makeText(getContext(),"fail",Toast.LENGTH_SHORT).show();
+                   dismiss();
+               }
+           }
+       });
+
        return builder;
    }
 
     @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+    }
+
+    @Override
     public void onResume() {
         //int width = getResources().getDimensionPixelSize(R.dimen.dialoge_width);
-
         super.onResume();
-
     }
 }
 
