@@ -28,8 +28,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ArrayList<Integer> Test = new ArrayList<Integer>(10);
 
-
-
         this.foodDataBaseManager =  FoodDataBaseManager.getInstance(this);
 
         if(true){
@@ -41,9 +39,6 @@ public class MainActivity extends AppCompatActivity {
         homeFragment = new HomeFragment();
         searchFragment = new SearchFragment();
         analysisFragment = new AnalysisFragment();
-
-        
-
 
         getSupportFragmentManager().beginTransaction().replace(R.id.container,homeFragment).commit();
 
