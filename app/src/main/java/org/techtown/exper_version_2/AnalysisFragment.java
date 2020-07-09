@@ -1,19 +1,188 @@
 package org.techtown.exper_version_2;
 
+import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TabHost;
 
 import androidx.fragment.app.Fragment;
 
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.charts.RadarChart;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.data.RadarData;
+import com.github.mikephil.charting.data.RadarDataSet;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 
 
 public class AnalysisFragment extends Fragment {
+
+    String m1="2000";
+    String m2="2200";
+    String m3="1500";
+    String m4="500";
+    String m5="600";
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        final FoodDataBaseManager FM=((MainActivity)getActivity()).getFoodDBManager();
+
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_analysis, container, false);
+        View v= inflater.inflate(R.layout.fragment_analysis, container, false);
+        TabHost tabHost=(TabHost) v.findViewById(R.id.host);
+        tabHost.setup();
+
+        TabHost.TabSpec tabSpecmonth= tabHost.newTabSpec("month").setIndicator("일별");
+        tabSpecmonth.setContent(R.id.tab1);
+        tabHost.addTab(tabSpecmonth);
+
+        TabHost.TabSpec tabSpecweek= tabHost.newTabSpec("week").setIndicator("주별");
+        tabSpecweek.setContent(R.id.tab2);
+        tabHost.addTab(tabSpecweek);
+
+        TabHost.TabSpec tabSpecday= tabHost.newTabSpec("day").setIndicator("월별");
+        tabSpecday.setContent(R.id.tab3);
+        tabHost.addTab(tabSpecday);
+
+        tabHost.setCurrentTab(0);
+
+        RadarChart radarChart=(RadarChart) v.findViewById(R.id.chart1);
+        ArrayList<Entry> max= new ArrayList<>();
+
+
+
+
+        max.add(new BarEntry(Float.parseFloat(m1), 0));
+        max.add(new BarEntry(Float.parseFloat(m2), 1));
+        max.add(new BarEntry(Float.parseFloat(m3), 2));
+        max.add(new BarEntry(Float.parseFloat(m4), 3));
+        max.add(new BarEntry(Float.parseFloat(m5), 4));
+
+
+        LineDataSet Max= new LineDataSet(max, "kcal 권장량");
+
+
+        ArrayList<String> labels=new ArrayList<String>();
+        ArrayList<String> label1=new ArrayList<String>();
+        ArrayList<String> label2=new ArrayList<String>();
+        labels.add("칼로리");
+        labels.add("탄수화물");
+        labels.add("나트륨");
+        labels.add("단백질");
+        labels.add("지방");
+
+        LineChart lineChart=(LineChart) v.findViewById(R.id.chart2);
+        LineChart lineChart1=(LineChart) v.findViewById(R.id.chart3);
+
+        XAxis xAxis=lineChart.getXAxis();
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        XAxis xAxis1=lineChart1.getXAxis();
+        xAxis1.setPosition(XAxis.XAxisPosition.BOTTOM);
+
+
+
+        long now=System.currentTimeMillis();
+        Date mDate = new Date(now);
+        /*SimpleDateFormat simpleMonth = new SimpleDateFormat("MM");*/
+        SimpleDateFormat simpleDate = new SimpleDateFormat("dd");
+        SimpleDateFormat simpleTime = new SimpleDateFormat("HH");
+
+        String cTime = simpleTime.format(mDate);
+        String cDate= simpleDate.format(mDate);
+
+        ArrayList<Entry> days=new ArrayList<>();
+        ArrayList<Entry> day1=new ArrayList<>();
+        /*ArrayList<String> day2=new ArrayList<String>();
+        ArrayList<String> day3=new ArrayList<String>();
+        ArrayList<String> day4=new ArrayList<String>();
+        ArrayList<String> day5=new ArrayList<String>();*/
+
+        Cursor cursor = FM.select("kcal", "2000.0");
+        float k=0;
+        float n1=0;
+        float n2=0;
+        float n3=0;
+        float n4=0;
+        float k1=0;
+        float m1=0;
+        float m2=0;
+        float m3=0;
+        float m4=0;
+        //Analysis analysis = new Analysis();
+        if(cursor != null){
+            Log.d("test", "onCreateView: in Analysis : not null cursor");
+            while(cursor.moveToNext()){
+                Log.d("test", "Analysis Frag in While Cursor : "+cursor.getString(2));
+                if(cursor.getString(2).compareTo(cDate)==0){
+                    k=k+Float.parseFloat(cursor.getString(4));
+                    n1=n1+Float.parseFloat(cursor.getString(5));
+                    n2=n2+Float.parseFloat(cursor.getString(6));
+                    n3=n3+Float.parseFloat(cursor.getString(7));
+                    n4=n4+Float.parseFloat(cursor.getString(8));
+                    Log.d("test", "Analysis Frag in While Cursor : "+k+" "+n1+" "+n2+" "+n3+" "+n4+" ");
+                }
+                else{
+                    //Log.d("test", "Analysis Frag in While Cursor : c date "+cDate);
+                    //Log.d("test", "Analysis Frag in While Cursor : "+k+" "+n1+" "+n2+" "+n3+" "+n4+" ");
+                }
+            }
+        }
+        else{
+            Log.d("test", "onCreateView: in Analysis : null cursor");
+        }
+
+        days.add(new BarEntry(k,0));
+        days.add(new BarEntry(n1,1));
+        days.add(new BarEntry(n2,2));
+        days.add(new BarEntry(n3,3));
+        days.add(new BarEntry(n4,4));
+
+        Log.d("test", "onCreateView: days : "+days);
+
+
+        if(cursor !=null){
+            while(cursor.moveToNext()){
+                if(Integer.getInteger(cDate)-Integer.getInteger(cursor.getString(2))<=7){
+                    k1=k+Float.parseFloat(cursor.getString(4));
+                    m1=n1+Float.parseFloat(cursor.getString(5));
+                    m2=n2+Float.parseFloat(cursor.getString(6));
+                    m3=n3+Float.parseFloat(cursor.getString(7));
+                    m4=n4+Float.parseFloat(cursor.getString(8));
+                }
+            }
+        }
+
+
+        day1.add(new BarEntry(k1,0));
+        day1.add(new BarEntry(m1,1));
+        day1.add(new BarEntry(m2,2));
+        day1.add(new BarEntry(m3,3));
+        day1.add(new BarEntry(m4,4));
+        LineDataSet dataSet1=new LineDataSet(days, "총량");
+        LineData chartdata=new LineData(labels, dataSet1);
+        lineChart.setData(chartdata);
+
+
+        //lineChart1.setData(chartdata1);
+
+        //lineChart1.invalidate(); //차트 초기화 작업
+        //lineChart1.clear();
+
+        RadarDataSet radarDataSet=new RadarDataSet(days,"량");
+        RadarData radarData=new RadarData(labels, radarDataSet);
+        radarChart.setData(radarData);
+        return v;
     }
 }

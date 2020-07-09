@@ -77,7 +77,7 @@ public class HomeFragment extends Fragment {
             }
         });
         */
-        ArrayList<Food> recommendList = new ArrayList<>();
+        final ArrayList<Food> recommendList = new ArrayList<>();
 
         Cursor cursor = FM.select("meal", "2000.0");
 
@@ -94,18 +94,25 @@ public class HomeFragment extends Fragment {
         }
 
 
-
-
         foodListAdapter.setItems(recommendList);
+        foodListAdapter.setOnItemClickListener(new FoodListAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                Log.d("test", "onItemClick in Home using DB: Success");
+                OnClickItem(position,recommendList);
+            }
+        });
         recyclerView.setAdapter(foodListAdapter);
 
         return rootView;
     }
 
 
-    public void OnClickItem(int position){
+    public void OnClickItem(int position,ArrayList<Food> foodList){
+
         FoodListClickDialog dialogFragment = new FoodListClickDialog(foodList.get(position).getFoodname(),
                 foodList.get(position).getKcal(),foodList.get(position).getNutr());
+
         dialogFragment.show(getFragmentManager(),"simiple");
 
         Log.d("test", "OnClickItem: data_0: "+foodList.get(position).getFoodname());

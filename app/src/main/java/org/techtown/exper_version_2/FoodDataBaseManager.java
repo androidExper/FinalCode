@@ -47,8 +47,21 @@ public class FoodDataBaseManager {
         return db.insert(TABLE_FOOD, null, addRowValues);
     }
 
+    public Cursor select(String columname, String margin){
+        //return db.rawQuery("SELECT * FROM "+TABLE_FOOD +" WHERE "+"kcal"+" > 2000",null);
+        return db.rawQuery("SELECT * FROM "+TABLE_FOOD,null);
+    }
 
+    public void deleteAll(){
+        db.execSQL("DELETE from "+TABLE_FOOD);
+    }
 
+    public  boolean checkConnection(){
+        return true;
+    }
+}
+
+    /*
     public Cursor query(String[] colums,
                         String selection,
                         String[] selectionArgs,
@@ -64,14 +77,4 @@ public class FoodDataBaseManager {
                 having,
                 orderby);
     }
-
-    public Cursor select(String columname, String margin){
-        //return db.rawQuery("SELECT * FROM "+TABLE_FOOD +" WHERE "+"kcal"+" > 2000",null);
-        return db.rawQuery("SELECT * FROM "+TABLE_FOOD,null);
-    }
-
-
-    public  boolean checkConnection(){
-        return true;
-    }
-}
+     */

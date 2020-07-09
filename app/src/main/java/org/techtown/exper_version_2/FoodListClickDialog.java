@@ -42,9 +42,9 @@ import java.util.Date;
 public class FoodListClickDialog extends DialogFragment {
     private  Fragment fragment;
 
-    String foodname;
-    String kcal;
-    String[] nutr;
+    String foodname="";
+    String kcal="0";
+    String[] nutr=new String[4];
 
     String m1="2000";
     String m2="2200";
@@ -53,10 +53,27 @@ public class FoodListClickDialog extends DialogFragment {
     String m5="600";
 
     public FoodListClickDialog(String foodname,String kcal,String[] nutr){
-        this.foodname = foodname;
-        this.kcal = kcal;
-        this.nutr = nutr;
+        if(foodname != null)
+            this.foodname = foodname;
+        else
+            this.foodname = "Nothing";
+        if(kcal != null)
+            this.kcal = kcal;
+        else
+            this.kcal = "0";
+        if(nutr != null) {
+            for (int i = 0; i < 4; ++i) {
+                if (nutr[i] != null) {
+                    this.nutr[i] = nutr[i];
+                } else {
+                    this.nutr[i] = "0";
+                }
+            }
+        }
+        else
+            this.nutr = new String[4];
     }
+
 
    public Dialog onCreateDialog(Bundle saveInstanceState){
        View view = getActivity().getLayoutInflater().inflate(R.layout.fragment_food_list_click_dialog, new LinearLayout(getActivity()), false);
@@ -106,8 +123,6 @@ public class FoodListClickDialog extends DialogFragment {
        regButton.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
-
-
                long now = System.currentTimeMillis();
                Date mDate = new Date(now);
                SimpleDateFormat simpleMonth = new SimpleDateFormat("MM");
@@ -115,7 +130,9 @@ public class FoodListClickDialog extends DialogFragment {
                SimpleDateFormat simpleTime = new SimpleDateFormat("HH");
 
 
-               String cTime = simpleTime.format(mDate);
+               String cTime = simpleDate.format(mDate);
+               String dTime = simpleDate.format(mDate);
+
                Integer currTime=Integer.parseInt(cTime);
                String meal = "null";
                if (4 <= (Integer) currTime && (Integer)currTime <= 10) {
@@ -127,7 +144,7 @@ public class FoodListClickDialog extends DialogFragment {
                }
 
                addRowValue.put("foodname",foodname);
-               addRowValue.put("date",simpleDate.toString());
+               addRowValue.put("date",dTime);
                addRowValue.put("meal",meal);
                addRowValue.put("kcal",kcal);
                addRowValue.put("nutr1",nutr[0]);
@@ -136,9 +153,16 @@ public class FoodListClickDialog extends DialogFragment {
                addRowValue.put("nutr4",nutr[3]);
 
                FM.insert(addRowValue);
-
+               Log.d("test", "onClick: in FoodDialog Insert :"+addRowValue);
                String[] colums = new String[] {"_id","foodname","date","meal","kcal",
                        "nutr1","nutr2","nutr3","nutr4",};
+
+               Cursor cursor = FM.select("kcal","2000");
+               if(cursor!=null){
+                   while(cursor.moveToNext()){
+                       Log.d("test", "onCreate: in Main db "+cursor.getString(5));
+                   }
+               }
            }
        });
 

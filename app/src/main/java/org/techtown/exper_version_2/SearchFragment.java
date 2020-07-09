@@ -62,25 +62,36 @@ public class SearchFragment extends Fragment  {
                 String foodname = edit.getText().toString();
                 MyAsyncTask myAsyncTask = new MyAsyncTask(mainActivity,recyclerView,foodListAdapter,foodList);
                 myAsyncTask.execute(foodname);
+                myAsyncTask.getFoodListAdapter().setOnItemClickListener(new FoodListAdapter.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(int position) {
+                        Log.d("test", "onItemClick: Success");
+                        OnClickItem(position,foodList);
+                    }
+                });
             }
         });
-
-
-        foodListAdapter.setOnItemClickListener(new FoodListAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(int position) {
-                Log.d("test", "onItemClick: Success");
-            }
-        });
-
-
 
         recyclerView.setAdapter(foodListAdapter);
 
         return rootView;
     }
+    public void OnClickItem(int position,ArrayList<Food> foodList){
 
-    /*
+        FoodListClickDialog dialogFragment = new FoodListClickDialog(foodList.get(position).getFoodname(),
+                foodList.get(position).getKcal(),foodList.get(position).getNutr());
+
+        dialogFragment.show(getFragmentManager(),"simiple");
+
+        Log.d("test", "OnClickItem: data_0: "+foodList.get(position).getFoodname());
+        Log.d("test", "OnClickItem: data_0: "+foodList.get(position).getKcal());
+        Log.d("test", "OnClickItem: data_0: "+foodList.get(position).getNutr()[0]);
+        Log.d("test", "OnClickItem: data_0: "+foodList.get(position).getNutr()[1]);
+        Log.d("test", "OnClickItem: data_0: "+foodList.get(position).getNutr()[2]);
+        Log.d("test", "OnClickItem: data_0: "+foodList.get(position).getNutr()[3]);
+    }
+}
+ /*
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -95,6 +106,3 @@ public class SearchFragment extends Fragment  {
     }
 
      */
-
-
-}

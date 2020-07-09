@@ -4,7 +4,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -29,6 +31,17 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<Integer> Test = new ArrayList<Integer>(10);
 
         this.foodDataBaseManager =  FoodDataBaseManager.getInstance(this);
+        /*
+
+        */
+        foodDataBaseManager.deleteAll();
+
+        Cursor cursor = foodDataBaseManager.select("kcal","2000");
+        if(cursor!=null){
+          while(cursor.moveToNext()){
+              Log.d("test", "onCreate: in Main db "+cursor.getString(5));
+          }
+        }
 
         if(true){
             Intent intent = new Intent(getApplication(),Main2Activity.class);
