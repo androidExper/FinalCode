@@ -139,27 +139,13 @@ public class FoodListClickDialog extends DialogFragment {
 
                String[] colums = new String[] {"_id","foodname","date","meal","kcal",
                        "nutr1","nutr2","nutr3","nutr4",};
-               //Cursor cursor = FM.query(colums, null, null,null,null,null);
-
-
-               Cursor cursor = FM.select("kcal", "2000.0");
-               if(cursor != null){
-                   while(cursor.moveToNext()){
-                       Food foodData = new Food();
-
-
-                       Date date=simpleDate(cursor.getString(2));
-                       foodData.setFoodname(cursor.getString(1));
-                       foodData.setKcal(cursor.getString(2));
-                       Log.d("db", "in DB "+foodData.foodname);
-                   }
-               }
-
            }
        });
 
        return builder;
    }
+
+
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
