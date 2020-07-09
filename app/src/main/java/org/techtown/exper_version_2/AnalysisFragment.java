@@ -78,8 +78,8 @@ public class AnalysisFragment extends Fragment {
         ArrayList<String> label1=new ArrayList<String>();
         ArrayList<String> label2=new ArrayList<String>();
         labels.add("칼로리");
-        labels.add("탄수화물");
         labels.add("나트륨");
+        labels.add("탄수화물");
         labels.add("단백질");
         labels.add("지방");
 
@@ -104,8 +104,8 @@ public class AnalysisFragment extends Fragment {
 
         ArrayList<Entry> days=new ArrayList<>();
         ArrayList<Entry> day1=new ArrayList<>();
-        /*ArrayList<String> day2=new ArrayList<String>();
-        ArrayList<String> day3=new ArrayList<String>();
+        ArrayList<Entry> mon=new ArrayList<>();
+        /*ArrayList<String> day3=new ArrayList<String>();
         ArrayList<String> day4=new ArrayList<String>();
         ArrayList<String> day5=new ArrayList<String>();*/
 
@@ -120,6 +120,11 @@ public class AnalysisFragment extends Fragment {
         float m2=0;
         float m3=0;
         float m4=0;
+        float k2=0;
+        float l1=0;
+        float l2=0;
+        float l3=0;
+        float l4=0;
         //Analysis analysis = new Analysis();
         if(cursor != null){
             Log.d("test", "onCreateView: in Analysis : not null cursor");
@@ -154,8 +159,8 @@ public class AnalysisFragment extends Fragment {
 
         if(cursor !=null){
             while(cursor.moveToNext()){
-                if(Integer.getInteger(cDate)-Integer.getInteger(cursor.getString(2))<=7){
-                    k1=k+Float.parseFloat(cursor.getString(4));
+                if((Float.parseFloat(cDate)-Float.parseFloat(cursor.getString(2)))<=7){
+                    k1=k1+Float.parseFloat(cursor.getString(4));
                     m1=n1+Float.parseFloat(cursor.getString(5));
                     m2=n2+Float.parseFloat(cursor.getString(6));
                     m3=n3+Float.parseFloat(cursor.getString(7));
@@ -163,24 +168,43 @@ public class AnalysisFragment extends Fragment {
                 }
             }
         }
-
-
         day1.add(new BarEntry(k1,0));
         day1.add(new BarEntry(m1,1));
         day1.add(new BarEntry(m2,2));
         day1.add(new BarEntry(m3,3));
         day1.add(new BarEntry(m4,4));
+
+        if(cursor !=null){
+            while(cursor.moveToNext()){
+                if((Float.parseFloat(cDate)-Float.parseFloat(cursor.getString(2)))<=15 && (Float.parseFloat(cDate)-Float.parseFloat(cursor.getString(2)))>0){
+                    k2=k2+Float.parseFloat(cursor.getString(4));
+                    l1=l1+Float.parseFloat(cursor.getString(5));
+                    l2=l2+Float.parseFloat(cursor.getString(6));
+                    l3=l3+Float.parseFloat(cursor.getString(7));
+                    l4=l4+Float.parseFloat(cursor.getString(8));
+                }
+            }
+        }
+        mon.add(new BarEntry(k2,0));
+        mon.add(new BarEntry(l1,1));
+        mon.add(new BarEntry(l2,2));
+        mon.add(new BarEntry(l3,3));
+        mon.add(new BarEntry(l4,4));
+
+
+
+
         LineDataSet dataSet1=new LineDataSet(days, "총량");
         LineData chartdata=new LineData(labels, dataSet1);
         lineChart.setData(chartdata);
 
-
-        //lineChart1.setData(chartdata1);
+        LineDataSet dataSet2=new LineDataSet(mon, "총량");
+        LineData chartdata2=new LineData(labels, dataSet2);
+        lineChart1.setData(chartdata2);
 
         //lineChart1.invalidate(); //차트 초기화 작업
         //lineChart1.clear();
-
-        RadarDataSet radarDataSet=new RadarDataSet(days,"량");
+        RadarDataSet radarDataSet=new RadarDataSet(days,"총량");
         RadarData radarData=new RadarData(labels, radarDataSet);
         radarChart.setData(radarData);
         return v;

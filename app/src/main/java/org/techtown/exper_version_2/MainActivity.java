@@ -32,9 +32,9 @@ public class MainActivity extends AppCompatActivity {
 
         this.foodDataBaseManager =  FoodDataBaseManager.getInstance(this);
         /*
-
-        */
         foodDataBaseManager.deleteAll();
+        */
+
 
         Cursor cursor = foodDataBaseManager.select("kcal","2000");
         if(cursor!=null){
