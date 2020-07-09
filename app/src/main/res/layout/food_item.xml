@@ -1,101 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+<LinearLayout
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.cardview.widget.CardView android:layout_height="wrap_content" android:layout_width="match_parent" app:cardUseCompatPadding="true" app:cardElevation="5dp" app:cardCornerRadius="10dp" app:cardBackgroundColor="#FFFFFFFF">
 
 
-    <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:cardBackgroundColor="#FFFFFFFF"
-        app:cardCornerRadius="10dp"
-        app:cardElevation="5dp"
-        app:cardUseCompatPadding="true">
+        -<LinearLayout android:orientation="vertical" android:layout_height="wrap_content" android:layout_width="match_parent">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
 
-                <ImageView
-                    android:id="@+id/imageView"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:padding="5dp"
-                    app:srcCompat="@mipmap/ic_launcher" />
+        -<LinearLayout android:orientation="horizontal" android:layout_height="wrap_content" android:layout_width="match_parent">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/food_name"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textSize="30sp"
-                        android:text="Food Name" />
 
-                    <TextView
-                        android:id="@+id/kcal"
-                        android:textSize="25sp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textColor="#FF0000FF"
-                        android:text="Kcalory" />
-                </LinearLayout>
-            </LinearLayout>
+        -<LinearLayout android:orientation="vertical" android:layout_height="wrap_content" android:layout_width="match_parent" android:layout_margin="5dp">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+        <TextView android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:textStyle="bold"
+            android:layout_width="match_parent" android:id="@+id/food_name" android:text="Food Name" android:textSize="30sp"/>
 
-                <TextView
-                    android:id="@+id/nutr1"
-                    android:textSize="20sp"
-                    android:layout_weight="1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="탄수화물"
-                    />
-                <TextView
-                    android:id="@+id/nutr2"
-                    android:textSize="20sp"
-                    android:layout_weight="1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="나트륨"
-                    />
-                <TextView
-                    android:id="@+id/nutr3"
-                    android:textSize="20sp"
-                    android:layout_weight="1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="단백질"
-                    />
-                <TextView
-                    android:id="@+id/nutr4"
-                    android:textSize="20sp"
-                    android:layout_weight="1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="지방"
-                    />
+        <TextView android:layout_marginLeft="20dp" android:layout_height="wrap_content" android:layout_width="match_parent" android:id="@+id/kcal" android:text="Kcalory" android:textSize="25sp" android:textColor="#FF0000FF"/>
 
-            </LinearLayout>
-        </LinearLayout>
+    </LinearLayout>
+
+    </LinearLayout>
+
+
+        -<LinearLayout android:orientation="horizontal" android:layout_height="wrap_content" android:layout_width="match_parent">
+
+        <TextView android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/nutr1" android:text="탄수화물" android:textSize="20sp" android:gravity="center" android:layout_weight="1"/>
+
+        <TextView android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/nutr2" android:text="나트륨" android:textSize="20sp" android:gravity="center" android:layout_weight="1"/>
+
+        <TextView android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/nutr3" android:text="단백질" android:textSize="20sp" android:gravity="center" android:layout_weight="1"/>
+
+        <TextView android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/nutr4" android:text="지방" android:textSize="20sp" android:gravity="center" android:layout_weight="1"/>
+
+    </LinearLayout>
+
+    </LinearLayout>
+
     </androidx.cardview.widget.CardView>
 </LinearLayout>
